@@ -1,0 +1,58 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply antialiased text-gray-900 dark:text-white;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply px-8 py-3 rounded-lg transition-colors;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-secondary;
+  }
+
+  .btn-outline {
+    @apply border border-primary text-primary hover:bg-primary hover:text-white;
+  }
+}
+
+/* Animaciones personalizadas */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+@keyframes slideUp {
+  0% {
+    transform: translateY(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Transiciones suaves para el modo oscuro */
+.dark {
+  color-scheme: dark;
+}
+
+* {
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
