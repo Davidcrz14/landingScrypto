@@ -2,89 +2,126 @@
 
 Página web moderna y optimizada para Scrypto Solutions, que incluye un chatbot inteligente impulsado por Gemini AI, MODELO Gemini 2.0.
 
-## 🚀 Tecnologías Principales
+## 🚀 Características Principales
 
-- **React + Vite**: Framework principal con configuración optimizada
-- **TailwindCSS**: Framework CSS para diseño responsivo y dark mode
-- **Framer Motion**: Animaciones fluidas y optimizadas
+- **Diseño Moderno**: Interfaz limpia y minimalista con efectos glassmorphism
+- **Modo Oscuro**: Soporte nativo para dark/light mode con transiciones suaves
+- **Multilenguaje**: Sistema de internacionalización ES/EN
+- **Chat Bot IA**: Asistente virtual integrado con Gemini 2.0
+- **Diseño Responsivo**: Adaptable a todos los dispositivos
+- **Animaciones Optimizadas**: Transiciones fluidas y efectos visuales
+
+## 🚀 Tecnologías
+
+### Frontend
+
+- **React 18 + Vite**: Framework principal con configuración optimizada
+- **TailwindCSS**: Utilidades CSS para diseño responsivo
+- **Framer Motion**: Sistema de animaciones y transiciones
+- **React Context**: Manejo de estado global y temas
+
+### IA y Servicios
+
 - **Google Gemini AI**: Motor de IA para el chatbot
-- **React Markdown**: Renderizado de contenido con formato
+- **React Markdown**: Renderizado de respuestas con formato
 
 ## 📁 Estructura del Proyecto
 
+```
 src/
 ├── components/
-│ ├── About.jsx # Sección Sobre Nosotros
-│ ├── Contact.jsx # Formulario de Contacto
-│ ├── FloatingChat.jsx # Chat Bot Flotante
-│ ├── Hero.jsx # Sección Principal
-│ ├── Navbar.jsx # Barra de Navegación
-│ └── Services.jsx # Sección de Servicios
+│   ├── About.jsx       # Sección Sobre Nosotros (Actualizado)
+│   ├── Contact.jsx     # Información de Contacto
+│   ├── FloatingChat.jsx# Chat Bot Flotante
+│   ├── Hero.jsx       # Sección Principal
+│   ├── Navbar.jsx     # Barra de Navegación
+│   └── Services.jsx   # Sección de Servicios
 │
 ├── Services/
-│ └── Gemini.jsx # Servicio de integración con Gemini AI
+│   └── Gemini.jsx    # Integración con Gemini AI
 │
 ├── context/
-│ └── LanguageContext.jsx # Contexto para internacionalización
+│   └── LanguageContext.jsx # Sistema de internacionalización
+│
+└── App.css          # Estilos globales y animaciones
+```
 
-## ✨ Características
+## ✨ Mejoras Recientes
 
-- **Diseño Responsivo**: Adaptable a todos los dispositivos
-- **Modo Oscuro**: Soporte nativo para dark/light mode
-- **Multilenguaje**: Sistema de internacionalización
-- **Chat Bot IA**: Asistente virtual integrado
-- **Animaciones**: Transiciones y efectos optimizados
-- **SEO Optimizado**: Metadatos y estructura semántica
+### Diseño
 
-## 🛠️ Optimizaciones
+- Eliminación de patrones de fondo para una interfaz más limpia
+- Nuevo layout para la sección About con diseño asimétrico
+- Mejora en la disposición de elementos y espaciado
+- Optimización de la jerarquía visual
 
-- Lazy loading de componentes
-- Imágenes optimizadas
-- Animaciones basadas en GPU
-- Caché de respuestas del chatbot
-- Diseño atómico de componentes
+### Rendimiento
 
-## 🔧 Variables de Entorno
+- Memoización de componentes y funciones
+- Optimización de re-renderizados
+- Lazy loading de componentes pesados
+- Mejora en la gestión de estados
 
-.env
+### UX/UI
+
+- Nuevas animaciones de scroll
+- Efectos hover mejorados
+- Mejor contraste y legibilidad
+- Tooltips informativos en tecnologías
+
+## 🛠️ Configuración
+
+### Variables de Entorno
+
+```env
 VITE_GEMINI_API_KEY=tu_api_key_aqui
+```
 
-## 📦 Dependencias Principales
+### Instalación
 
-- @heroicons/react: Iconos optimizados
-- @google/generative-ai: SDK de Gemini
-- framer-motion: Librería de animaciones
-- react-markdown: Renderizado de markdown
-- tailwindcss: Framework CSS
+```bash
+# Clonar el repositorio
+git clone [https://github.com/Davidcrz14/landingScrypto]
 
-## 🚀 Inicio Rápido
+# Instalar dependencias
+npm install
 
-1. Clona el repositorio
-2. Instala las dependencias:
-   ```bash
-   npm install
-   ```
-3. Configura las variables de entorno
-4. Inicia el servidor de desarrollo:
-   ```bash
-   npm run dev
-   ```
+# Iniciar desarrollo
+npm run dev
 
-## 💡 Características del Chat Bot
+# Construir para producción
+npm run build
+```
 
-- Respuestas en tiempo real
-- Formato Markdown en respuestas
-- Integración con sistema de soporte
-- Transcripción de conversaciones
-- Derivación automática a soporte humano
+## 📱 Características del Chat Bot
+
+- **Respuestas Inteligentes**: Procesamiento de lenguaje natural
+- **Formato Markdown**: Respuestas con formato enriquecido
+- **Derivación a Soporte**: Sistema automático de escalamiento
+- **Historial**: Transcripción de conversaciones
+- **Multilenguaje**: Soporte para ES/EN
 
 ## 🎨 Personalización
 
-El proyecto utiliza TailwindCSS para estilos. Los temas principales se pueden modificar en:
+### Temas
 
-- tailwind.config.js
-- src/App.css
+El proyecto utiliza TailwindCSS para estilos. Configuración principal en:
 
-## 📱 PWA Ready
+- `tailwind.config.js`: Colores, fuentes y breakpoints
+- `src/App.css`: Animaciones y estilos globales
 
-La aplicación está configurada como PWA (Progressive Web App) para una mejor experiencia móvil.
+### Componentes
+
+Cada componente está diseñado para ser modular y personalizable:
+
+- Props documentadas
+- Estilos mediante clases de Tailwind
+- Animaciones configurables
+
+## 📈 Optimizaciones
+
+- **Performance**: Código dividido y lazy loading
+- **SEO**: Metadatos y estructura semántica
+- **Accesibilidad**: ARIA labels y contraste
+- **Mobile First**: Diseño responsive optimizado
+- **Caché**: Sistema de caché para respuestas del chat
