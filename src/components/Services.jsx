@@ -5,31 +5,36 @@ import {
   ShieldCheckIcon,
   WindowIcon
 } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import PropTypes from 'prop-types';
 import { memo, useMemo } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
 const ServiceCard = memo(({ service, index, t }) => {
+  const prefersReducedMotion = useReducedMotion();
+
   const animationConfig = useMemo(() => ({
-    initial: { opacity: 0, y: 20 },
+    initial: prefersReducedMotion ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 },
     whileInView: { opacity: 1, y: 0 },
     transition: {
-      duration: 0.3,
-      delay: index * 0.1,
-      ease: "easeOut"
+      duration: 0.2,
+      delay: Math.min(index * 0.1, 0.3),
+      ease: [0.25, 0.1, 0.25, 1]
     },
-    viewport: { once: true, margin: "-50px" }
-  }), [index]);
+    viewport: {
+      once: true,
+      margin: "100px",
+      amount: 0.3
+    }
+  }), [index, prefersReducedMotion]);
 
   return (
     <motion.div
       {...animationConfig}
-      className="group relative bg-white dark:bg-dark-200 p-6 sm:p-8 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 will-change-transform"
+      className="relative bg-white dark:bg-dark-200 p-6 sm:p-8 rounded-2xl shadow-lg"
     >
-      <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-secondary/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity"></div>
       <div className="relative z-10">
-        <div className="w-12 sm:w-16 h-12 sm:h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6 transform transition-transform group-hover:scale-110 will-change-transform">
+        <div className="w-12 sm:w-16 h-12 sm:h-16 bg-primary/10 rounded-xl flex items-center justify-center mb-4 sm:mb-6">
           <div className="text-primary">
             {service.icon}
           </div>
@@ -52,10 +57,10 @@ const ServiceCard = memo(({ service, index, t }) => {
         </div>
         <a
           href="#contact"
-          className="inline-flex items-center text-primary hover:text-secondary transition-colors group/link"
+          className="inline-flex items-center text-primary hover:text-secondary"
         >
           <span className="text-sm sm:text-base font-medium">{t('services.learnMore')}</span>
-          <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 ml-2 transform transition-transform group-hover/link:translate-x-1" />
+          <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5 ml-2" />
         </a>
       </div>
     </motion.div>
@@ -77,6 +82,7 @@ ServiceCard.propTypes = {
 
 const Services = () => {
   const { t } = useLanguage();
+  const prefersReducedMotion = useReducedMotion();
 
   const services = useMemo(() => [
     {
@@ -105,14 +111,18 @@ const Services = () => {
     }
   ], []);
 
+  const titleAnimConfig = useMemo(() => ({
+    initial: prefersReducedMotion ? { opacity: 1 } : { opacity: 0 },
+    whileInView: { opacity: 1 },
+    transition: { duration: 0.3 },
+    viewport: { once: true, amount: 0.5 }
+  }), [prefersReducedMotion]);
+
   return (
     <section id="services" className="relative py-16 sm:py-24 bg-white dark:bg-dark-100">
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4 }}
-          viewport={{ once: true, margin: "-50px" }}
+          {...titleAnimConfig}
           className="text-center max-w-3xl mx-auto mb-12 sm:mb-20"
         >
           <h2 className="text-3xl sm:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent mb-4 sm:mb-6">
