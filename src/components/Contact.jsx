@@ -1,55 +1,26 @@
 import {
   ArrowRightIcon,
-  ChatBubbleLeftRightIcon,
   EnvelopeIcon,
-  GlobeAltIcon,
   MapPinIcon,
-  PhoneIcon,
-  UserIcon,
+  PhoneIcon
 } from '@heroicons/react/24/outline';
-import { motion } from 'framer-motion';
-import { useState } from 'react';
-import { FaGithub } from 'react-icons/fa'; // Solo se mantiene GitHub
+import { memo, motion, useMemo } from 'framer-motion';
+import { FaGithub } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
 
 const socialLinks = [
-  { name: 'GitHub', icon: <FaGithub className="w-5 h-5" />, href: '#' } // Solo GitHub
+  { name: 'GitHub', icon: <FaGithub className="w-5 h-5" />, href: '#' }
 ];
 
 const Contact = () => {
   const { t } = useLanguage();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: ''
-  });
 
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    // Simular envío
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    console.log('Form submitted:', formData);
-    setIsSubmitting(false);
-    // Aquí iría la lógica real de envío
-  };
-
-  const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
-  };
-
-  const contactInfo = [
+  const contactInfo = useMemo(() => [
     {
       icon: <EnvelopeIcon className="w-6 h-6" />,
       title: t('contact.form.email'),
       value: 'support@scryptosolutions.com',
-      href: 'mailto:contacto@scrypto.com'
+      href: 'mailto:support@scryptosolutions.com'
     },
     {
       icon: <PhoneIcon className="w-6 h-6" />,
@@ -63,7 +34,7 @@ const Contact = () => {
       value: 'No c',
       href: '#'
     }
-  ];
+  ], [t]);
 
   return (
     <section id="contact" className="relative py-24 bg-white dark:bg-dark-100">
@@ -83,7 +54,7 @@ const Contact = () => {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-16">
+        <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
@@ -137,102 +108,25 @@ const Contact = () => {
                 ))}
               </div>
             </div>
-          </motion.div>
 
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-          >
-            <form onSubmit={handleSubmit} className="bg-white dark:bg-dark-200 rounded-2xl shadow-xl p-6 sm:p-8 space-y-4 sm:space-y-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                <div>
-                  <label htmlFor="name" className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
-                    <div className="flex items-center space-x-1.5 sm:space-x-2">
-                      <UserIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      <span>{t('contact.form.name')}</span>
-                    </div>
-                  </label>
-                  <input
-                    type="text"
-                    id="name"
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 dark:bg-dark-300 border border-gray-200 dark:border-dark-400 focus:ring-2 focus:ring-primary focus:border-primary dark:text-white transition-colors text-sm sm:text-base"
-                    placeholder={t('contact.form.placeholders.name')}
-                  />
-                </div>
-                <div>
-                  <label htmlFor="email" className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
-                    <div className="flex items-center space-x-1.5 sm:space-x-2">
-                      <EnvelopeIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                      <span>{t('contact.form.email')}</span>
-                    </div>
-                  </label>
-                  <input
-                    type="email"
-                    id="email"
-                    name="email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    required
-                    className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 dark:bg-dark-300 border border-gray-200 dark:border-dark-400 focus:ring-2 focus:ring-primary focus:border-primary dark:text-white transition-colors text-sm sm:text-base"
-                    placeholder={t('contact.form.placeholders.email')}
-                  />
-                </div>
-              </div>
-              <div>
-                <label htmlFor="subject" className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
-                  <div className="flex items-center space-x-1.5 sm:space-x-2">
-                    <GlobeAltIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>{t('contact.form.subject')}</span>
-                  </div>
-                </label>
-                <input
-                  type="text"
-                  id="subject"
-                  name="subject"
-                  value={formData.subject}
-                  onChange={handleChange}
-                  required
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 dark:bg-dark-300 border border-gray-200 dark:border-dark-400 focus:ring-2 focus:ring-primary focus:border-primary dark:text-white transition-colors text-sm sm:text-base"
-                  placeholder={t('contact.form.placeholders.subject')}
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 mb-1.5 sm:mb-2">
-                  <div className="flex items-center space-x-1.5 sm:space-x-2">
-                    <ChatBubbleLeftRightIcon className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    <span>{t('contact.form.message')}</span>
-                  </div>
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  value={formData.message}
-                  onChange={handleChange}
-                  required
-                  rows={6}
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg bg-gray-50 dark:bg-dark-300 border border-gray-200 dark:border-dark-400 focus:ring-2 focus:ring-primary focus:border-primary dark:text-white transition-colors resize-none text-sm sm:text-base"
-                  placeholder={t('contact.form.placeholders.message')}
-                ></textarea>
-              </div>
-              <motion.button
-                type="submit"
-                disabled={isSubmitting}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-                className={`w-full px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all flex items-center justify-center space-x-2 text-sm sm:text-base ${
-                  isSubmitting ? 'opacity-75 cursor-not-allowed' : ''
-                }`}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              viewport={{ once: true }}
+              className="text-center"
+            >
+              <motion.a
+                href="mailto:support@scryptosolutions.com"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
               >
-                <span>{isSubmitting ? t('contact.form.sending') : t('contact.form.submit')}</span>
-                {!isSubmitting && <ArrowRightIcon className="w-4 h-4 sm:w-5 sm:h-5" />}
-              </motion.button>
-            </form>
+                <EnvelopeIcon className="w-5 h-5 mr-2" />
+                {t('contact.cta.email')}
+                <ArrowRightIcon className="w-5 h-5 ml-2" />
+              </motion.a>
+            </motion.div>
           </motion.div>
         </div>
       </div>
@@ -240,4 +134,4 @@ const Contact = () => {
   );
 };
 
-export default Contact;
+export default memo(Contact);

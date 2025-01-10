@@ -5,59 +5,91 @@
   padding: 0;
 }
 
-/* Formas y patrones de fondo */
-.bg-pattern {
-  background-image: radial-gradient(
-      rgba(255, 255, 255, 0.1) 1px,
-      transparent 1px
-    ),
-    radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
-  background-position: 0 0, 25px 25px;
-  background-size: 50px 50px;
-}
-
 /* Animaciones de rotación */
 @keyframes rotate-slow {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg) scale(1);
+  }
+  50% {
+    transform: rotate(180deg) scale(1.1);
   }
   to {
-    transform: rotate(360deg);
+    transform: rotate(360deg) scale(1);
   }
 }
 
 @keyframes rotate-reverse {
   from {
-    transform: rotate(0deg);
+    transform: rotate(0deg) scale(1.1);
+  }
+  50% {
+    transform: rotate(-180deg) scale(1);
   }
   to {
-    transform: rotate(-360deg);
+    transform: rotate(-360deg) scale(1.1);
+  }
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
   }
 }
 
 .animate-rotate-slow {
-  animation: rotate-slow 20s linear infinite;
+  animation: rotate-slow 20s ease-in-out infinite;
 }
 
 .animate-rotate-reverse {
-  animation: rotate-reverse 25s linear infinite;
+  animation: rotate-reverse 25s ease-in-out infinite;
 }
 
 .animate-rotate-medium {
-  animation: rotate-slow 30s linear infinite;
+  animation: rotate-slow 30s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Efectos de hover */
+.hover-glow {
+  transition: all 0.3s ease-in-out;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+  transform: translateY(-5px);
 }
 
 /* Media queries para dispositivos móviles */
 @media (max-width: 640px) {
   .animate-rotate-slow {
-    animation: rotate-slow 30s linear infinite;
+    animation: rotate-slow 30s ease-in-out infinite;
   }
 
   .animate-rotate-reverse {
-    animation: rotate-reverse 35s linear infinite;
+    animation: rotate-reverse 35s ease-in-out infinite;
   }
 
   .animate-rotate-medium {
-    animation: rotate-slow 40s linear infinite;
+    animation: rotate-slow 40s ease-in-out infinite;
   }
+}
+
+/* Efectos de desenfoque y glassmorphism */
+.blur-effect {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }

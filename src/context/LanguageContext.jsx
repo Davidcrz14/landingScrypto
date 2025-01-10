@@ -19,8 +19,7 @@ const translations = {
       cta: {
         primary: 'Inicia tu Proyecto',
         secondary: 'Explora Servicios'
-      },
-      techTitle: 'Tecnologías que Dominamos'
+      }
     },
     services: {
       title: 'Nuestros Servicios',
@@ -48,7 +47,8 @@ const translations = {
     },
     about: {
       title: 'Sobre Scrypto',
-      description: 'We are a team dedicated to the development of web and desktop applications, we offer our solutions to any private company or person.',
+      description: 'Somos un equipo dedicado al desarrollo de aplicaciones web y de escritorio, ofrecemos nuestras soluciones a cualquier empresa privada o persona.',
+      techTitle: 'Tecnologías que Manejamos',
       stats: {
         projects: 'Proyectos Exitosos',
         clients: 'Clientes Satisfechos',
@@ -109,6 +109,9 @@ const translations = {
       info: {
         title: 'Información de Contacto',
         social: 'Síguenos'
+      },
+      cta: {
+        email: 'Contáctanos por Email'
       }
     },
     footer: {
@@ -132,8 +135,7 @@ const translations = {
       cta: {
         primary: 'Start Your Project',
         secondary: 'Explore Services'
-      },
-      techTitle: 'Technologies We Master'
+      }
     },
     services: {
       title: 'Our Services',
@@ -161,7 +163,8 @@ const translations = {
     },
     about: {
       title: 'About Scrypto',
-      description: 'We are a team dedicated to the development of web and desktop applications, we offer our solutions to any private company or person.',
+      description: 'We are a team dedicated to the development of web and desktop applications, offering our solutions to any private company or person.',
+      techTitle: 'Technologies We Handle',
       stats: {
         projects: 'Successful Projects',
         clients: 'Satisfied Clients',
@@ -222,6 +225,9 @@ const translations = {
       info: {
         title: 'Contact Information',
         social: 'Follow Us'
+      },
+      cta: {
+        email: 'Contact Us by Email'
       }
     },
     footer: {

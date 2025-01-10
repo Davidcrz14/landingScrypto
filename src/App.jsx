@@ -27,24 +27,27 @@ function AppContent() {
   }, [isDark]);
 
   return (
-    <div className={`min-h-screen bg-white dark:bg-dark-100 ${isDark ? 'dark' : ''}`}>
-      <Navbar isDark={isDark} setIsDark={setIsDark} />
-      <main>
-        <Hero />
-        <Services />
-        <About />
-        <Contact />
-      </main>
-      <footer className="bg-white dark:bg-dark-100 py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <p className="text-gray-600 dark:text-gray-300">
-              © {new Date().getFullYear()} Scrypto. {t('footer.rights')}
-            </p>
+    <div className={`min-h-screen bg-white dark:bg-dark-100 relative ${isDark ? 'dark' : ''}`}>
+      <div className="fixed inset-0 bg-pattern opacity-5 pointer-events-none"></div>
+      <div className="relative">
+        <Navbar isDark={isDark} setIsDark={setIsDark} />
+        <main>
+          <Hero />
+          <Services />
+          <About />
+          <Contact />
+        </main>
+        <footer className="bg-transparent py-8">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="text-center">
+              <p className="text-gray-600 dark:text-gray-300">
+                © {new Date().getFullYear()} Scrypto. {t('footer.rights')}
+              </p>
+            </div>
           </div>
-        </div>
-      </footer>
-      <FloatingChat />
+        </footer>
+        <FloatingChat />
+      </div>
     </div>
   );
 }

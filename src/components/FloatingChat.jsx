@@ -1,8 +1,58 @@
 import { ChatBubbleLeftRightIcon, PaperAirplaneIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 import GeminiService from '../Services/Gemini';
+
+const ChatMessage = memo(({ message, onContactSupport }) => {
+  const isUser = message.role === 'user';
+
+  return (
+    <div className={`flex items-start space-x-2 ${isUser ? 'flex-row-reverse space-x-reverse' : ''}`}>
+      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+        isUser ? 'bg-primary text-white' : 'bg-primary/10'
+      }`}>
+        {isUser ? (
+          <UserIcon className="w-5 h-5 text-white" />
+        ) : (
+          <ChatBubbleLeftRightIcon className="w-5 h-5 text-primary" />
+        )}
+      </div>
+      <div className={`rounded-2xl p-3 max-w-[80%] shadow-sm ${
+        isUser ? 'bg-primary text-white rounded-tr-none' : 'bg-white dark:bg-dark-200 rounded-tl-none'
+      }`}>
+        <p className={`text-sm ${isUser ? 'text-white' : 'text-gray-800 dark:text-gray-200'}`}>
+          {message.content.includes('[SOLICITUD_HUMANO]') ? (
+            <>
+              <ReactMarkdown>{message.content.replace('[SOLICITUD_HUMANO]', '')}</ReactMarkdown>
+              <button
+                onClick={onContactSupport}
+                className="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-primary/90 transition-colors block w-full"
+              >
+                Contactar Soporte
+              </button>
+            </>
+          ) : (
+            <ReactMarkdown className="prose dark:prose-invert prose-sm max-w-none">
+              {message.content}
+            </ReactMarkdown>
+          )}
+        </p>
+      </div>
+    </div>
+  );
+});
+
+ChatMessage.displayName = 'ChatMessage';
+
+ChatMessage.propTypes = {
+  message: PropTypes.shape({
+    role: PropTypes.string.isRequired,
+    content: PropTypes.string.isRequired
+  }).isRequired,
+  onContactSupport: PropTypes.func.isRequired
+};
 
 const FloatingChat = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,15 +66,30 @@ const FloatingChat = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
+  }, []);
 
-  useEffect(() => {
-    scrollToBottom();
+  const handleContactSupport = useCallback(async () => {
+    const transcript = messages.map(msg =>
+      `${msg.role.toUpperCase()}: ${msg.content.replace('[SOLICITUD_HUMANO]', '')}`
+    ).join('\n\n');
+
+    const lastUserMessage = messages
+      .filter(msg => msg.role === 'user')
+      .pop()?.content || 'No se encontró la última pregunta del usuario';
+
+    const emailBody =
+      `Solicitud de atención humana\n\n` +
+      `Última pregunta del usuario: ${lastUserMessage}\n\n` +
+      `Transcripción del chat:\n${transcript}`;
+
+    const mailtoLink = `mailto:support@scryptosolutions.com?subject=${encodeURIComponent('Solicitud de Soporte - Scrypto')}&body=${encodeURIComponent(emailBody)}`;
+
+    window.location.href = mailtoLink;
   }, [messages]);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     if (message.trim() && !isLoading) {
       const userMessage = message.trim();
@@ -46,30 +111,23 @@ const FloatingChat = () => {
         setIsLoading(false);
       }
     }
-  };
+  }, [message, isLoading]);
 
-  const handleContactSupport = async () => {
-    // Crear la transcripción del chat
-    const transcript = messages.map(msg =>
-      `${msg.role.toUpperCase()}: ${msg.content.replace('[SOLICITUD_HUMANO]', '')}`
-    ).join('\n\n');
+  const handleMessageChange = useCallback((e) => {
+    setMessage(e.target.value);
+  }, []);
 
-    // Obtener el último mensaje del usuario para contexto
-    const lastUserMessage = messages
-      .filter(msg => msg.role === 'user')
-      .pop()?.content || 'No se encontró la última pregunta del usuario';
+  const handleToggleChat = useCallback(() => {
+    setIsOpen(prev => !prev);
+  }, []);
 
-    // Crear el contenido del correo con el formato correcto
-    const emailBody =
-      `Solicitud de atención humana\n\n` +
-      `Última pregunta del usuario: ${lastUserMessage}\n\n` +
-      `Transcripción del chat:\n${transcript}`;
+  const handleCloseChat = useCallback(() => {
+    setIsOpen(false);
+  }, []);
 
-    const mailtoLink = `mailto:support@scryptosolutions.com?subject=${encodeURIComponent('Solicitud de Soporte - Scrypto')}&body=${encodeURIComponent(emailBody)}`;
-
-    // Abrir el cliente de correo
-    window.location.href = mailtoLink;
-  };
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   return (
     <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50">
@@ -90,7 +148,7 @@ const FloatingChat = () => {
                 </h3>
               </div>
               <button
-                onClick={() => setIsOpen(false)}
+                onClick={handleCloseChat}
                 className="text-white hover:bg-white/20 rounded-lg p-1 transition-colors"
               >
                 <XMarkIcon className="w-6 h-6" />
@@ -101,53 +159,11 @@ const FloatingChat = () => {
             <div className="h-[300px] sm:h-[400px] p-4 overflow-y-auto bg-gray-50 dark:bg-dark-300">
               <div className="space-y-4">
                 {messages.map((msg, index) => (
-                  <div
+                  <ChatMessage
                     key={index}
-                    className={`flex items-start space-x-2 ${
-                      msg.role === 'user' ? 'flex-row-reverse space-x-reverse' : ''
-                    }`}
-                  >
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                      msg.role === 'user'
-                        ? 'bg-primary text-white'
-                        : 'bg-primary/10'
-                    }`}>
-                      {msg.role === 'user' ? (
-                        <UserIcon className="w-5 h-5 text-white" />
-                      ) : (
-                        <ChatBubbleLeftRightIcon className="w-5 h-5 text-primary" />
-                      )}
-                    </div>
-                    <div className={`rounded-2xl p-3 max-w-[80%] shadow-sm ${
-                      msg.role === 'user'
-                        ? 'bg-primary text-white rounded-tr-none'
-                        : 'bg-white dark:bg-dark-200 rounded-tl-none'
-                    }`}>
-                      <p className={`text-sm ${
-                        msg.role === 'user'
-                          ? 'text-white'
-                          : 'text-gray-800 dark:text-gray-200'
-                      }`}>
-                        {msg.content.includes('[SOLICITUD_HUMANO]') ? (
-                          <>
-                            <ReactMarkdown>
-                              {msg.content.replace('[SOLICITUD_HUMANO]', '')}
-                            </ReactMarkdown>
-                            <button
-                              onClick={handleContactSupport}
-                              className="mt-2 bg-primary text-white px-4 py-2 rounded-lg text-sm hover:bg-primary/90 transition-colors block w-full"
-                            >
-                              Contactar Soporte
-                            </button>
-                          </>
-                        ) : (
-                          <ReactMarkdown className="prose dark:prose-invert prose-sm max-w-none">
-                            {msg.content}
-                          </ReactMarkdown>
-                        )}
-                      </p>
-                    </div>
-                  </div>
+                    message={msg}
+                    onContactSupport={handleContactSupport}
+                  />
                 ))}
 
                 <div ref={messagesEndRef} />
@@ -160,7 +176,7 @@ const FloatingChat = () => {
                 <input
                   type="text"
                   value={message}
-                  onChange={(e) => setMessage(e.target.value)}
+                  onChange={handleMessageChange}
                   placeholder="Escribe tu mensaje..."
                   disabled={isLoading}
                   className="flex-1 px-4 py-2 rounded-xl bg-gray-100 dark:bg-dark-300 border-0 focus:ring-2 focus:ring-primary text-sm dark:text-white disabled:opacity-50"
@@ -182,7 +198,7 @@ const FloatingChat = () => {
 
       {/* Botón flotante */}
       <motion.button
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={handleToggleChat}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         className="bg-gradient-to-r from-primary to-secondary text-white p-4 rounded-full shadow-lg hover:shadow-xl transition-shadow relative"
@@ -200,4 +216,4 @@ const FloatingChat = () => {
   );
 };
 
-export default FloatingChat;
+export default memo(FloatingChat);

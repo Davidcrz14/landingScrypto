@@ -1,24 +1,75 @@
 import {
-    Bars3Icon,
-    EnvelopeIcon,
-    HomeIcon,
-    LanguageIcon,
-    MoonIcon,
-    SunIcon,
-    UserGroupIcon,
-    WrenchScrewdriverIcon,
-    XMarkIcon
+  Bars3Icon,
+  EnvelopeIcon,
+  HomeIcon,
+  LanguageIcon,
+  MoonIcon,
+  SunIcon,
+  UserGroupIcon,
+  WrenchScrewdriverIcon,
+  XMarkIcon
 } from '@heroicons/react/24/outline';
 import { AnimatePresence, motion } from 'framer-motion';
-import { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { memo, useCallback, useEffect, useMemo, useState } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 
-const menuItems = [
-  { name: { es: 'Inicio', en: 'Home' }, href: '#home', icon: <HomeIcon className="w-5 h-5" /> },
-  { name: { es: 'Servicios', en: 'Services' }, href: '#services', icon: <WrenchScrewdriverIcon className="w-5 h-5" /> },
-  { name: { es: 'Nosotros', en: 'About' }, href: '#about', icon: <UserGroupIcon className="w-5 h-5" /> },
-  { name: { es: 'Contacto', en: 'Contact' }, href: '#contact', icon: <EnvelopeIcon className="w-5 h-5" /> }
-];
+const MenuItem = memo(({ item, language, activeSection, onClick }) => (
+  <motion.a
+    href={item.href}
+    onClick={onClick}
+    whileHover={{ x: 4 }}
+    className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors ${
+      activeSection === item.href.slice(1)
+        ? 'text-primary bg-primary/10'
+        : 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:bg-primary/5'
+    }`}
+  >
+    {item.icon}
+    <span>{item.name[language]}</span>
+  </motion.a>
+));
+
+MenuItem.displayName = 'MenuItem';
+
+MenuItem.propTypes = {
+  item: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    icon: PropTypes.node.isRequired,
+    name: PropTypes.object.isRequired
+  }).isRequired,
+  language: PropTypes.string.isRequired,
+  activeSection: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired
+};
+
+const DesktopMenuItem = memo(({ item, language, activeSection }) => (
+  <motion.a
+    href={item.href}
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
+      activeSection === item.href.slice(1)
+        ? 'text-primary bg-primary/10'
+        : 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:bg-primary/5'
+    }`}
+  >
+    {item.icon}
+    <span>{item.name[language]}</span>
+  </motion.a>
+));
+
+DesktopMenuItem.displayName = 'DesktopMenuItem';
+
+DesktopMenuItem.propTypes = {
+  item: PropTypes.shape({
+    href: PropTypes.string.isRequired,
+    icon: PropTypes.node.isRequired,
+    name: PropTypes.object.isRequired
+  }).isRequired,
+  language: PropTypes.string.isRequired,
+  activeSection: PropTypes.string.isRequired
+};
 
 const Navbar = ({ isDark, setIsDark }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -26,28 +77,34 @@ const Navbar = ({ isDark, setIsDark }) => {
   const [activeSection, setActiveSection] = useState('home');
   const { language, toggleLanguage } = useLanguage();
 
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+  const menuItems = useMemo(() => [
+    { name: { es: 'Inicio', en: 'Home' }, href: '#home', icon: <HomeIcon className="w-5 h-5" /> },
+    { name: { es: 'Servicios', en: 'Services' }, href: '#services', icon: <WrenchScrewdriverIcon className="w-5 h-5" /> },
+    { name: { es: 'Nosotros', en: 'About' }, href: '#about', icon: <UserGroupIcon className="w-5 h-5" /> },
+    { name: { es: 'Contacto', en: 'Contact' }, href: '#contact', icon: <EnvelopeIcon className="w-5 h-5" /> }
+  ], []);
 
-      // Detectar sección activa
-      const sections = menuItems.map(item => item.href.slice(1));
-      const current = sections.find(section => {
-        const element = document.getElementById(section);
-        if (element) {
-          const rect = element.getBoundingClientRect();
-          return rect.top <= 100 && rect.bottom >= 100;
-        }
-        return false;
-      });
-      if (current) {
-        setActiveSection(current);
+  const handleScroll = useCallback(() => {
+    setIsScrolled(window.scrollY > 20);
+
+    const sections = menuItems.map(item => item.href.slice(1));
+    const current = sections.find(section => {
+      const element = document.getElementById(section);
+      if (element) {
+        const rect = element.getBoundingClientRect();
+        return rect.top <= 100 && rect.bottom >= 100;
       }
-    };
+      return false;
+    });
+    if (current) {
+      setActiveSection(current);
+    }
+  }, [menuItems]);
 
+  useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [handleScroll]);
 
   useEffect(() => {
     if (isDark) {
@@ -57,9 +114,9 @@ const Navbar = ({ isDark, setIsDark }) => {
     }
   }, [isDark]);
 
-  const closeMenu = () => {
+  const closeMenu = useCallback(() => {
     setIsMenuOpen(false);
-  };
+  }, []);
 
   return (
     <motion.nav
@@ -89,20 +146,12 @@ const Navbar = ({ isDark, setIsDark }) => {
           <div className="hidden md:flex items-center space-x-1">
             <div className="flex items-center space-x-1">
               {menuItems.map((item) => (
-                <motion.a
-                  key={item.name[language]}
-                  href={item.href}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
-                    activeSection === item.href.slice(1)
-                      ? 'text-primary bg-primary/10'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:bg-primary/5'
-                  }`}
-                >
-                  {item.icon}
-                  <span>{item.name[language]}</span>
-                </motion.a>
+                <DesktopMenuItem
+                  key={item.href}
+                  item={item}
+                  language={language}
+                  activeSection={activeSection}
+                />
               ))}
             </div>
 
@@ -165,20 +214,13 @@ const Navbar = ({ isDark, setIsDark }) => {
           >
             <div className="px-4 py-2 space-y-1">
               {menuItems.map((item) => (
-                <motion.a
-                  key={item.name[language]}
-                  href={item.href}
+                <MenuItem
+                  key={item.href}
+                  item={item}
+                  language={language}
+                  activeSection={activeSection}
                   onClick={closeMenu}
-                  whileHover={{ x: 4 }}
-                  className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors ${
-                    activeSection === item.href.slice(1)
-                      ? 'text-primary bg-primary/10'
-                      : 'text-gray-700 dark:text-gray-300 hover:text-primary dark:hover:text-primary hover:bg-primary/5'
-                  }`}
-                >
-                  {item.icon}
-                  <span>{item.name[language]}</span>
-                </motion.a>
+                />
               ))}
               <motion.button
                 whileTap={{ scale: 0.95 }}
@@ -213,4 +255,9 @@ const Navbar = ({ isDark, setIsDark }) => {
   );
 };
 
-export default Navbar;
+Navbar.propTypes = {
+  isDark: PropTypes.bool.isRequired,
+  setIsDark: PropTypes.func.isRequired
+};
+
+export default memo(Navbar);
