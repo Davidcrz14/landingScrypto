@@ -27,17 +27,16 @@ function AppContent() {
   }, [isDark]);
 
   return (
-    <div className={`min-h-screen bg-white dark:bg-dark-100 relative ${isDark ? 'dark' : ''}`}>
-      <div className="fixed inset-0 bg-pattern opacity-5 pointer-events-none"></div>
+    <div className="min-h-screen bg-white dark:bg-dark-100 relative overflow-x-hidden w-full">
       <div className="relative">
         <Navbar isDark={isDark} setIsDark={setIsDark} />
-        <main>
+        <main className="w-full">
           <Hero />
           <Services />
           <About />
           <Contact />
         </main>
-        <footer className="bg-transparent py-8">
+        <footer className="bg-transparent py-8 w-full">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center">
               <p className="text-gray-600 dark:text-gray-300">
