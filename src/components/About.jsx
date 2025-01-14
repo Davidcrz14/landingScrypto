@@ -20,9 +20,12 @@ import {
   FaJs,
   FaNodeJs,
   FaPhp,
+  FaPython,
   FaReact
 } from 'react-icons/fa';
 import {
+  SiC,
+  SiCplusplus,
   SiDotnet,
   SiMongodb,
   SiMysql,
@@ -128,6 +131,9 @@ const About = () => {
     { icon: FaDatabase, name: 'Databases', color: '#239120' },
     { icon: SiDotnet, name: '.NET', color: '#512BD4' },
     { icon: FaGithub, name: 'GitHub', color: '#181717' },
+    { icon: FaPython, name: 'Python', color: '#3776AB' },
+    { icon: SiC, name: 'C', color: '#A8B9CC' },
+    { icon: SiCplusplus, name: 'C++', color: '#00599C' },
   ];
 
   return (

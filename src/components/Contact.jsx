@@ -1,17 +1,11 @@
 import {
   ArrowRightIcon,
   EnvelopeIcon,
-  MapPinIcon,
-  PhoneIcon
 } from '@heroicons/react/24/outline';
 import { motion } from 'framer-motion';
 import { memo, useMemo } from 'react';
-import { FaGithub } from 'react-icons/fa';
+import { FaDiscord } from 'react-icons/fa';
 import { useLanguage } from '../context/LanguageContext';
-
-const socialLinks = [
-  { name: 'GitHub', icon: <FaGithub className="w-5 h-5" />, href: '#' }
-];
 
 const Contact = () => {
   const { t } = useLanguage();
@@ -24,16 +18,10 @@ const Contact = () => {
       href: 'mailto:support@scryptosolutions.com'
     },
     {
-      icon: <PhoneIcon className="w-6 h-6" />,
-      title: t('contact.form.phone'),
-      value: '0000000000',
-      href: 'tel:+12345678900'
-    },
-    {
-      icon: <MapPinIcon className="w-6 h-6" />,
-      title: t('contact.form.location'),
-      value: 'No c',
-      href: '#'
+      icon: <FaDiscord className="w-6 h-6" />,
+      title: 'Discord',
+      value: 'scryptosolutions',
+      href: 'https://discord.gg/fmYnnhEzHe'
     }
   ], [t]);
 
@@ -92,24 +80,6 @@ const Contact = () => {
               </div>
             </div>
 
-            <div className="bg-white dark:bg-dark-200 rounded-2xl shadow-xl p-6 sm:p-8">
-              <h3 className="text-xl sm:text-2xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6">
-                {t('contact.info.social')}
-              </h3>
-              <div className="flex space-x-3 sm:space-x-4">
-                {socialLinks.map((social) => (
-                  <a
-                    key={social.name}
-                    href={social.href}
-                    className="w-10 h-10 sm:w-12 sm:h-12 bg-primary/10 rounded-lg flex items-center justify-center text-primary hover:bg-primary hover:text-white transition-all transform hover:scale-110"
-                    aria-label={social.name}
-                  >
-                    {social.icon}
-                  </a>
-                ))}
-              </div>
-            </div>
-
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -117,16 +87,28 @@ const Contact = () => {
               viewport={{ once: true }}
               className="text-center"
             >
-              <motion.a
-                href="mailto:support@scryptosolutions.com"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
-              >
-                <EnvelopeIcon className="w-5 h-5 mr-2" />
-                {t('contact.cta.email')}
-                <ArrowRightIcon className="w-5 h-5 ml-2" />
-              </motion.a>
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <motion.a
+                  href="mailto:support@scryptosolutions.com"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-primary to-secondary text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                >
+                  <EnvelopeIcon className="w-5 h-5 mr-2" />
+                  {t('contact.cta.email')}
+                  <ArrowRightIcon className="w-5 h-5 ml-2" />
+                </motion.a>
+                <motion.a
+                  href="https://discord.gg/fmYnnhEzHe"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="inline-flex items-center px-8 py-4 bg-[#5865F2] text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all"
+                >
+                  <FaDiscord className="w-5 h-5 mr-2" />
+                  Únete a Discord
+                  <ArrowRightIcon className="w-5 h-5 ml-2" />
+                </motion.a>
+              </div>
             </motion.div>
           </motion.div>
         </div>

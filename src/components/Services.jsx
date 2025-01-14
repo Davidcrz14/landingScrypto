@@ -95,7 +95,7 @@ const Services = () => {
       title: 'services.items.desktop.title',
       description: 'services.items.desktop.description',
       icon: <WindowIcon className="w-8 h-8" />,
-      tech: ['C#', '.NET', 'WPF']
+      tech: ['C#', '.NET', 'WPF', 'Python', 'C/C++']
     },
     {
       title: 'services.items.responsive.title',
