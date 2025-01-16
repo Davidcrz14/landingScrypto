@@ -17,7 +17,16 @@ import { useLanguage } from '../context/LanguageContext';
 const MenuItem = memo(({ item, language, activeSection, onClick }) => (
   <motion.a
     href={item.href}
-    onClick={onClick}
+    onClick={(e) => {
+      e.preventDefault();
+      const element = document.querySelector(item.href);
+      if (element) {
+        onClick();
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 150);
+      }
+    }}
     whileHover={{ x: 4 }}
     className={`flex items-center space-x-2 px-4 py-3 rounded-lg transition-colors ${
       activeSection === item.href.slice(1)
@@ -46,6 +55,13 @@ MenuItem.propTypes = {
 const DesktopMenuItem = memo(({ item, language, activeSection }) => (
   <motion.a
     href={item.href}
+    onClick={(e) => {
+      e.preventDefault();
+      const element = document.querySelector(item.href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }}
     whileHover={{ scale: 1.05 }}
     whileTap={{ scale: 0.95 }}
     className={`px-4 py-2 rounded-lg flex items-center space-x-2 transition-colors ${
